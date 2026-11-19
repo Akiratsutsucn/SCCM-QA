@@ -72,7 +72,9 @@ details.more b { color: var(--text-2); font-weight: 600; }
 .ranking li:nth-child(1) .rk { background: #f6dfa0; color: #6b5310; }
 .ranking li:nth-child(2) .rk { background: #dfe6ee; color: #3d4b5c; }
 .ranking li:nth-child(3) .rk { background: #f3d6c4; color: #6b3d22; }
-.ranking .tt { flex: 1; min-width: 0; font-size: .92rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ranking .tt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.ranking .nm { font-size: .92rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ranking .cd { font-family: var(--mono); font-size: .8rem; color: var(--danger); letter-spacing: .02em; }
 .ranking .ct { flex: none; font-size: .85rem; color: var(--text-2); white-space: nowrap; }
 .ranking .note { font-size: .78rem; color: var(--text-2); margin-top: 8px; }
 

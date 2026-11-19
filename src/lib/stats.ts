@@ -83,7 +83,7 @@ export async function perArticle(db: Db, days: number) {
  * 不足 N 条时用其他已发布问题补齐（次数为 0，按最近发布排序），让操作员一眼看到常见问题。
  */
 export async function topEncounters(db: Db, days: number, limit: number) {
-  return db.query<{ slug: string; title: string; n: number }>(
+  return db.query<{ slug: string; title: string; n: number; codes: string[] | null }>(
     `WITH c AS (
        SELECT article_id, count(*)::int AS n FROM events
         WHERE type = 'report_encounter' AND (created_at AT TIME ZONE 'Asia/Shanghai')::date >= ${SINCE}
@@ -94,7 +94,7 @@ export async function topEncounters(db: Db, days: number, limit: number) {
           AND day < coalesce((SELECT min((created_at AT TIME ZONE 'Asia/Shanghai')::date) FROM events), '9999-12-31'::date)
         GROUP BY article_id),
      t AS (SELECT article_id, sum(n)::int AS n FROM c GROUP BY article_id)
-     SELECT a.slug, coalesce(nullif(a.published->>'short', ''), a.published->>'title') AS title, coalesce(t.n, 0)::int AS n
+     SELECT a.slug, coalesce(nullif(a.published->>'short', ''), a.published->>'title') AS title, coalesce(t.n, 0)::int AS n, a.published->'codes' AS codes
        FROM articles a LEFT JOIN t ON t.article_id = a.id
       WHERE a.status = 'published'
       ORDER BY coalesce(t.n, 0) DESC, a.published_at DESC LIMIT $2`,

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { Announcement } from '@/lib/announcements';
 import { fmtMonthDay } from '@/lib/time';
 import { homeHref } from './url';
+import { normalizeCode } from '@/lib/errorcode';
 
 /** 告诉操作员错误码在报错窗口的哪里（静态示例图 public/help/error-code-where.webp）。 */
 export function ErrorCodeHint() {
@@ -38,21 +39,35 @@ export function Notices({ list }: { list: Announcement[] }) {
   );
 }
 
-export function Ranking({ list }: { list: { slug: string; title: string; n: number }[] }) {
+/** 取文章填写的第一个错误码（标准化），并从短名里去掉重复的码。 */
+function nameAndCode(title: string, codes: string[] | null): { name: string; code: string | null } {
+  const code = (codes ?? []).map((c) => normalizeCode(c)).find((c): c is string => !!c) ?? null;
+  if (!code) return { name: title, code: null };
+  const name = title.replace(new RegExp(`\\s*${code.replace(/^0x/i, '(0x)?')}\\s*`, 'i'), ' ').trim();
+  return { name: name || title, code };
+}
+
+export function Ranking({ list }: { list: { slug: string; title: string; n: number; codes: string[] | null }[] }) {
   return (
     <section className="side-card ranking" aria-labelledby="rank-h">
       <h2 id="rank-h">常见问题 TOP 10</h2>
       {list.length === 0 ? <p className="muted small">还没有已发布的问题。</p> : (
         <ol>
-          {list.map((r, i) => (
-            <li key={r.slug}>
-              <Link href={homeHref({ a: r.slug })}>
-                <span className="rk">{i + 1}</span>
-                <span className="tt">{r.title}</span>
-                {r.n > 0 && <span className="ct">{r.n} 次</span>}
-              </Link>
-            </li>
-          ))}
+          {list.map((r, i) => {
+            const { name, code } = nameAndCode(r.title, r.codes);
+            return (
+              <li key={r.slug}>
+                <Link href={homeHref({ a: r.slug })}>
+                  <span className="rk">{i + 1}</span>
+                  <span className="tt">
+                    <span className="nm">{name}</span>
+                    {code && <span className="cd">{code}</span>}
+                  </span>
+                  {r.n > 0 && <span className="ct">{r.n} 次</span>}
+                </Link>
+              </li>
+            );
+          })}
         </ol>
       )}
       <p className="note">次数 = 近 30 天大家点「我也遇到了」</p>
