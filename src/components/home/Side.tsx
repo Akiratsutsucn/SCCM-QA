@@ -9,11 +9,11 @@ import { normalizeCode } from '@/lib/errorcode';
 export function ErrorCodeHint() {
   return (
     <section className="side-card hint" aria-labelledby="hint-h">
-      <h2 id="hint-h">错误码在哪找？</h2>
+      <h2 id="hint-h">错误码（error code）在哪找？</h2>
       <a href="/help/error-code-where.webp" target="_blank" rel="noopener" className="hint-img" aria-label="打开大图">
         <img src="/help/error-code-where.webp" width={1020} height={563} alt="任务序列报错窗口：error code 后面 0x 开头的一串就是错误码，例如 0x80004005" />
       </a>
-      <p className="hint-text">报错窗口里 <b>error code</b> 后面，<b>0x 开头</b>的一串就是。把它输入到上面的搜索框。</p>
+      <p className="hint-text">报错窗口里 <b>error code</b>（错误码）后面，<b>0x 开头</b>的一串就是。输入到上面的搜索框。</p>
     </section>
   );
 }

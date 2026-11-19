@@ -13,7 +13,7 @@ export function Results({ r, submitKey }: { r: SearchResult; submitKey: string |
       <h2 className="q">
         {r.tooShort ? '再多写几个字' : r.hits.length ? `找到 ${r.hits.length} 个` : '没找到'}
       </h2>
-      {code && r.hits.length > 1 && <p className="muted small" style={{ marginBottom: 12 }}>同一个错误码可能有不同原因，选最像的一个。</p>}
+      {code && r.hits.length > 1 && <p className="muted small" style={{ marginBottom: 12 }}>同一个错误码（error code）可能有不同原因，选最像的一个。</p>}
       <div className="choices one">
         {r.hits.map((h) => (
           <TrackLink key={h.id} href={homeHref({ a: h.slug, q: r.query })} className="choice" event={{ type: 'search_click', articleId: h.id, submitKey }}>

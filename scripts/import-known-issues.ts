@@ -15,7 +15,7 @@ import { createArticle, publishArticle, saveDraft } from '../src/lib/articles';
 import { mainTree, publishTree } from '../src/lib/guides';
 
 interface Seed {
-  articles: (Record<string, unknown> & { key: string; title: string })[];
+  articles: (Record<string, unknown> & { key: string; title: string; oldTitles?: string[] })[];
   guide: { root: string; nodes: Record<string, { kind: 'q' | 't'; title: string; options?: [string, string, boolean?][]; articles?: string[] }> };
 }
 
@@ -24,11 +24,12 @@ const ACTOR = 'import:known-issues';
 async function importArticles(db: Db, seed: Seed, publish: boolean, refresh: boolean) {
   const ids = new Map<string, number>();
   for (const raw of seed.articles) {
-    const existing = await db.query<{ id: number; status: string }>(`SELECT id, status FROM articles WHERE draft->>'title' = $1`, [raw.title]);
+    // 按现标题或旧标题（oldTitles）匹配，改标题后不会重复建文章
+    const existing = await db.query<{ id: number; status: string }>(`SELECT id, status FROM articles WHERE draft->>'title' = ANY($1::text[]) ORDER BY id LIMIT 1`, [[raw.title, ...(raw.oldTitles ?? [])]]);
     if (existing[0]) {
       ids.set(raw.key, existing[0].id);
       if (refresh) {
-        const { key: _k, ...f } = raw;
+        const { key: _k, oldTitles: _o, ...f } = raw;
         await saveDraft(db, existing[0].id, ContentSchema.parse(f));
         if (existing[0].status === 'published') await publishArticle(db, existing[0].id, ACTOR, { redactionConfirmed: true, note: '种子更新' });
         console.log(`已更新：${raw.title}`);
@@ -37,7 +38,7 @@ async function importArticles(db: Db, seed: Seed, publish: boolean, refresh: boo
       }
       continue;
     }
-    const { key: _key, ...fields } = raw;
+    const { key: _key, oldTitles: _old, ...fields } = raw;
     const content = ContentSchema.parse(fields);
     const a = await createArticle(db, content);
     ids.set(raw.key, a.id);

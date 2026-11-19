@@ -30,7 +30,7 @@ export function SearchBox({ defaultValue = '' }: { defaultValue?: string }) {
         router.push(`/?q=${encodeURIComponent(q)}&k=${crypto.randomUUID().replace(/-/g, '').slice(0, 16)}`);
       }}
     >
-      <input ref={ref} name="q" type="search" defaultValue={defaultValue} maxLength={200} placeholder="输入错误码" aria-label="输入错误码或现象" autoComplete="off" enterKeyHint="search" />
+      <input ref={ref} name="q" type="search" defaultValue={defaultValue} maxLength={200} placeholder="输入错误码（error code）" aria-label="输入错误码（error code）或现象" autoComplete="off" enterKeyHint="search" />
       <button className="btn btn-primary" type="submit">搜索</button>
     </form>
   );
@@ -115,7 +115,7 @@ export function TellAdmin({ context, defaultText = '' }: { context: string; defa
         setState(ok ? 'done' : 'error');
       }}
     >
-      <label htmlFor={`tell-${context}`} className="small">没找到？写下错误码或看到的字，告诉管理员</label>
+      <label htmlFor={`tell-${context}`} className="small">没找到？写下错误码（error code）或看到的字，告诉管理员</label>
       <div className="row">
         <input id={`tell-${context}`} name="text" type="text" maxLength={300} defaultValue={defaultText} required autoComplete="off" placeholder="例如：0x8007000D 卡在 30%" />
         <input className="hp" name="website" tabIndex={-1} aria-hidden="true" autoComplete="off" />

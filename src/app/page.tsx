@@ -60,7 +60,7 @@ async function MainArea({ sp }: { sp: Awaited<Props['searchParams']> }) {
     return (
       <div className="empty-box">
         <h2 className="q">还没有可以选择的问题</h2>
-        <p className="muted">先在上面输入错误码搜索。</p>
+        <p className="muted">先在上面输入错误码（error code）搜索。</p>
         <TellAdmin context="empty" />
       </div>
     );

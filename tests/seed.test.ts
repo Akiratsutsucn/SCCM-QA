@@ -17,6 +17,16 @@ describe('第一批 QA 种子', () => {
     }
   });
 
+  it('SCCM 专用名词带中英对照', () => {
+    const root = seed.guide.nodes[seed.guide.root].options.map((o: string[]) => o[0]).join(' ');
+    expect(root).toContain('软件中心（Software Center）');
+    expect(root).toContain('分发点（DP）');
+    expect(root).toContain('客户端（Configuration Manager client）');
+    const text = JSON.stringify(seed.articles.map((a: { title: string; steps: unknown }) => [a.title, a.steps]));
+    expect(text).not.toMatch(/(?<!（)Software Center(?!）)[^（]*$/);
+    expect(text).not.toContain('（Software Center）（Software Center）');
+  });
+
   it('不含设备名、站点代码、包 ID、地名', () => {
     const text = JSON.stringify(seed);
     expect(text).not.toMatch(/\bW[A-Z0-9]{6,}\b|CN\d{4}VM|SHA0\d+|Client-\d+|义乌|宁波|常州|合肥|重庆/);

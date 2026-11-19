@@ -5,12 +5,12 @@
       "key": "hash",
       "title": "下载完成后报内容哈希不一致（0x80091007）",
       "short": "下载后哈希不一致",
-      "summary": "升级内容已下载，校验时报哈希不一致；历史案例中原因是终端上的 IPG 软件，而不是分发点内容损坏。",
+      "summary": "升级内容已下载，校验时报哈希不一致；历史案例中原因是终端上的 IPG 软件，而不是分发点（DP）内容损坏。",
       "stage": "内容下载或分发",
       "symptoms": [
         "下载完成后报哈希不一致",
         "日志出现 Original ContentHash",
-        "出现错误码"
+        "出现错误码（error code）"
       ],
       "codes": [
         "0x80091007"
@@ -21,27 +21,27 @@
         "网络或获取内容失败"
       ],
       "appliesTo": "- 升级内容已下载完成，在校验或解压阶段报 0x80091007 或「哈希不一致」\n- 日志里能看到两条不同的 ContentHash（Original ContentHash 与实际计算值）",
-      "notAppliesTo": "- 下载本身没有完成、进度停在下载阶段：先按「获取内容失败」类问题排查\n- 报其他错误码：同一现象可能有不同原因，请对照其他办法",
+      "notAppliesTo": "- 下载本身没有完成、进度停在下载阶段：先按「获取内容失败」类问题排查\n- 报其他错误码（error code）：同一现象可能有不同原因，请对照其他办法",
       "risks": "- 关闭或卸载安全类软件（IPG）需要现场负责人同意，并可能需要本地管理员权限\n- 不要自行反复重新分发或删除缓存",
       "stopRule": "关闭或卸载 IPG 等安全软件属于高风险操作：停止，先交给现场负责人确认是否允许，再由有权限的人执行。本站不会远程执行。",
       "steps": [
         {
-          "action": "确认报错确实是在下载完成之后的校验阶段出现，并记下完整错误码和失败时间。",
-          "expected": "错误码为 0x80091007，或日志提示内容哈希不一致。",
+          "action": "确认报错确实是在下载完成之后的校验阶段出现，并记下完整错误码（error code）和失败时间。",
+          "expected": "错误码（error code）为 0x80091007，或日志提示内容哈希不一致。",
           "success": "确认属于本篇描述的情形。",
-          "ifFailed": "不是这个错误码或阶段：返回搜索，换用实际错误码查找。"
+          "ifFailed": "不是这个错误码（error code）或阶段：返回搜索，换用实际错误码查找。"
         },
         {
           "action": "确认这台电脑是否安装并运行着 IPG 软件。",
           "expected": "能看到 IPG 相关程序或服务。",
           "success": "确认存在 IPG。",
-          "ifFailed": "没有 IPG：本篇可能不适用，请点「没解决」并告诉管理员，附上错误码和失败时间。"
+          "ifFailed": "没有 IPG：本篇可能不适用，请点「没解决」并告诉管理员，附上错误码（error code）和失败时间。"
         },
         {
           "action": "联系现场负责人，说明「下载后哈希不一致，电脑上有 IPG」。历史案例中，在负责人确认后关闭或卸载 IPG，再重新开始升级即可通过。",
           "expected": "由现场负责人决定是否关闭或卸载 IPG，并由有权限的人执行。",
           "success": "IPG 处理后重新开始升级，不再出现哈希不一致。",
-          "ifFailed": "仍然报同一错误：停止重试，告诉管理员，附上错误码、失败时间和 IPG 处理情况。"
+          "ifFailed": "仍然报同一错误：停止重试，告诉管理员，附上错误码（error code）、失败时间和 IPG 处理情况。"
         }
       ],
       "verify": "- 重新开始升级后，内容校验通过，升级继续进入后续阶段。",
@@ -50,14 +50,14 @@
     },
     {
       "key": "hardblock",
-      "title": "Windows 安装程序报 0xC1900208（兼容性硬阻止）",
+      "title": "Windows 安装程序（Windows Setup）报 0xC1900208（兼容性硬阻止）",
       "short": "兼容性硬阻止 0xC1900208",
-      "summary": "安装程序在兼容性检查阶段发现会阻止升级的软件；历史案例中阻止项标题为 ahsProtector。需要找出并处理阻止升级的软件。",
+      "summary": "Windows 安装程序（Windows Setup）在兼容性检查阶段发现会阻止升级的软件；历史案例中阻止项标题为 ahsProtector。需要找出并处理阻止升级的软件。",
       "stage": "兼容性或前置检查",
       "symptoms": [
         "兼容性检查失败",
         "驱动或软件阻止",
-        "出现错误码"
+        "出现错误码（error code）"
       ],
       "codes": [
         "0xC1900208",
@@ -68,22 +68,22 @@
         "硬阻止",
         "ahsProtector"
       ],
-      "appliesTo": "- Windows 安装程序报 0xC1900208\n- 提示有应用或驱动与 Windows 11 不兼容、阻止升级",
+      "appliesTo": "- Windows 安装程序（Windows Setup）报 0xC1900208\n- 提示有应用或驱动与 Windows 11 不兼容、阻止升级",
       "notAppliesTo": "- 报 0xC1900204（迁移方式被拒）：请看另一篇\n- 升级已经进入安装或重启阶段后才失败",
       "risks": "- 卸载或停用阻止升级的软件需要现场负责人同意，可能需要本地管理员权限\n- 阻止项对应的具体软件和版本在部分案例中仍未确认",
       "stopRule": "不要自行卸载你不认识的软件或安全组件：停止，交给现场负责人确认阻止项是什么软件、是否允许处理。",
       "steps": [
         {
-          "action": "记下错误码 0xC1900208 和失败时间，确认是在兼容性检查阶段失败。",
-          "expected": "安装程序提示兼容性问题或硬阻止。",
+          "action": "记下错误码（error code） 0xC1900208 和失败时间，确认是在兼容性检查阶段失败。",
+          "expected": "Windows 安装程序（Windows Setup）提示兼容性问题或硬阻止。",
           "success": "确认属于本篇情形。",
-          "ifFailed": "错误码不同：返回搜索，换用实际错误码查找。"
+          "ifFailed": "错误码（error code）不同：返回搜索，换用实际错误码查找。"
         },
         {
           "action": "请现场负责人或管理员查看这台电脑的兼容性报告（Panther 目录下的兼容性结果），找出被标为「硬阻止」的项目名称。",
           "expected": "报告中列出阻止升级的应用或驱动名称。历史案例中出现过 ahsProtector。",
           "success": "找到阻止项名称。",
-          "ifFailed": "找不到或看不懂报告：告诉管理员，附上错误码和失败时间。"
+          "ifFailed": "找不到或看不懂报告：告诉管理员，附上错误码（error code）和失败时间。"
         },
         {
           "action": "由现场负责人确认阻止项对应的软件，决定是否卸载、升级或停用后再重新开始升级。",
@@ -94,17 +94,20 @@
       ],
       "verify": "- 重新开始升级后不再报 0xC1900208，进入下载或安装阶段。",
       "evidence": "- 内部历史案例：一台设备的硬阻止项标题为 ahsProtector，所属软件和版本待核对；另一台设备同码，具体阻止项待查。",
-      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。"
+      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。",
+      "oldTitles": [
+        "Windows 安装程序报 0xC1900208（兼容性硬阻止）"
+      ]
     },
     {
       "key": "updatemedia",
       "title": "看起来是下载失败，实际卡在创建升级介质（0x80070003 / 0x40008）",
       "short": "创建升级介质失败",
-      "summary": "界面像是下载失败，但 SCCM 下载其实已完成；安装程序在系统临时目录创建 UpdateMedia 时失败。",
+      "summary": "界面像是下载失败，但 SCCM 下载其实已完成；Windows 安装程序（Windows Setup）在系统临时目录创建 UpdateMedia 时失败。",
       "stage": "任务序列执行",
       "symptoms": [
         "表面报下载失败",
-        "出现错误码",
+        "出现错误码（error code）",
         "网络或获取内容失败"
       ],
       "codes": [
@@ -117,21 +120,21 @@
         "InitializeUpdateMediaAction"
       ],
       "appliesTo": "- 报 0x80070003，常伴随 0x40008\n- 看起来像下载失败，但下载进度已经完成",
-      "notAppliesTo": "- 下载确实没有完成、进度停在下载阶段\n- 报其他错误码",
+      "notAppliesTo": "- 下载确实没有完成、进度停在下载阶段\n- 报其他错误码（error code）",
       "risks": "- 修改系统临时目录或环境变量属于系统配置变更，需要本地管理员权限\n- 单机修复方案尚待管理员按原始记录核对",
       "stopRule": "不要自行修改系统 TEMP 环境变量或删除系统目录：停止，交给现场负责人。修复方案由管理员确认后再执行。",
       "steps": [
         {
           "action": "记下 0x80070003 / 0x40008 和失败时间，确认下载进度是否已经走完。",
           "expected": "下载已完成，随后失败。",
-          "success": "确认属于本篇情形：问题不在下载，而在安装程序创建升级介质这一步。",
+          "success": "确认属于本篇情形：问题不在下载，而在Windows 安装程序（Windows Setup）创建升级介质这一步。",
           "ifFailed": "下载没走完：本篇不适用，改按下载类问题排查。"
         },
         {
-          "action": "不要重复点重新下载。把错误码、失败时间告诉现场负责人，说明「下载已完成，疑似系统临时目录无法创建 UpdateMedia」。",
+          "action": "不要重复点重新下载。把错误码（error code）、失败时间告诉现场负责人，说明「下载已完成，疑似系统临时目录无法创建 UpdateMedia」。",
           "expected": "由现场负责人和管理员核对系统 TEMP 路径与权限后处理。",
           "success": "负责人确认处理方案。",
-          "ifFailed": "联系不上负责人：告诉管理员，附上错误码和失败时间。"
+          "ifFailed": "联系不上负责人：告诉管理员，附上错误码（error code）和失败时间。"
         }
       ],
       "verify": "- 处理后重新开始升级，越过创建升级介质这一步，进入安装阶段。",
@@ -142,11 +145,11 @@
       "key": "migchoice",
       "title": "升级执行后报 0xC1900204（所选迁移方式被拒绝）",
       "short": "迁移方式被拒 0xC1900204",
-      "summary": "升级任务已到达并执行，安装程序拒绝了所选的迁移方式（MIGCHOICE_BLOCK）。",
+      "summary": "升级任务已到达并执行，Windows 安装程序（Windows Setup）拒绝了所选的迁移方式（MIGCHOICE_BLOCK）。",
       "stage": "Windows 安装过程",
       "symptoms": [
         "升级执行后失败",
-        "出现错误码"
+        "出现错误码（error code）"
       ],
       "codes": [
         "0xC1900204",
@@ -163,15 +166,15 @@
       "steps": [
         {
           "action": "记下 0xC1900204 和失败时间，确认升级任务已经开始执行。",
-          "expected": "任务已执行，安装程序随后报错。",
+          "expected": "任务已执行，Windows 安装程序（Windows Setup）随后报错。",
           "success": "确认属于本篇情形。",
-          "ifFailed": "任务没出现：改看「Software Center 里看不到升级任务」。"
+          "ifFailed": "任务没出现：改看「软件中心（Software Center）里看不到升级任务」。"
         },
         {
-          "action": "告诉现场负责人：升级执行后报 0xC1900204，安装程序拒绝所选迁移方式。请负责人或管理员核对这台电脑的系统语言、版本与升级介质是否匹配，并收集安装程序的 Panther 日志。",
+          "action": "告诉现场负责人：升级执行后报 0xC1900204，Windows 安装程序（Windows Setup）拒绝所选迁移方式。请负责人或管理员核对这台电脑的系统语言、版本与升级介质是否匹配，并收集安装程序的 Panther 日志。",
           "expected": "由负责人与管理员确认原因和处理方式。",
           "success": "负责人给出处理方案。",
-          "ifFailed": "告诉管理员，附上错误码、失败时间和电脑当前系统语言。"
+          "ifFailed": "告诉管理员，附上错误码（error code）、失败时间和电脑当前系统语言。"
         }
       ],
       "verify": "- 处理后重新升级不再报 0xC1900204。",
@@ -182,12 +185,12 @@
       "key": "maxruntime",
       "title": "23H2 升 24H2 时被取消（0x87D00664 / 0x800704C7，超过最大运行时间）",
       "short": "运行太久被取消",
-      "summary": "Windows 安装程序还在运行，但 SCCM 因超过部署允许的最大运行时间而取消了它。",
+      "summary": "Windows 安装程序（Windows Setup）还在运行，但 SCCM 因超过部署允许的最大运行时间而取消了它。",
       "stage": "Windows 安装过程",
       "symptoms": [
         "进度长时间不动",
         "升级中途被取消",
-        "出现错误码"
+        "出现错误码（error code）"
       ],
       "codes": [
         "0x87D00664",
@@ -204,19 +207,19 @@
       "stopRule": "",
       "steps": [
         {
-          "action": "记下错误码和升级开始、失败的大致时间，确认升级运行了较长时间后才失败。",
-          "expected": "失败前安装程序已长时间运行。",
+          "action": "记下错误码（error code）和升级开始、失败的大致时间，确认升级运行了较长时间后才失败。",
+          "expected": "失败前Windows 安装程序（Windows Setup）已长时间运行。",
           "success": "确认属于本篇情形。",
-          "ifFailed": "很快就失败：本篇不适用，用实际错误码重新搜索。"
+          "ifFailed": "很快就失败：本篇不适用，用实际错误码（error code）重新搜索。"
         },
         {
-          "action": "不要立即反复重试。告诉管理员：这台在 23H2 升 24H2 时因超过最大运行时间被取消，附上错误码和起止时间。",
+          "action": "不要立即反复重试。告诉管理员：这台在 23H2 升 24H2 时因超过最大运行时间被取消，附上错误码（error code）和起止时间。",
           "expected": "管理员核对该部署的更新属性和最大运行时间设置。",
           "success": "管理员调整后通知重新升级。",
           "ifFailed": "联系不上管理员：点「告诉管理员」留言。"
         }
       ],
-      "verify": "- 管理员调整后重新升级，安装程序运行完成，没有再被中途取消。",
+      "verify": "- 管理员调整后重新升级，Windows 安装程序（Windows Setup）运行完成，没有再被中途取消。",
       "evidence": "- 内部历史案例：SCCM 超过允许时长后取消了仍在运行的 Windows 安装程序（更新属性、UpdatesDeployment 日志与时间线）。",
       "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。"
     },
@@ -237,7 +240,7 @@
         "重试"
       ],
       "appliesTo": "- 升级进行中电脑断电、被强制关机或意外重启",
-      "notAppliesTo": "- 没有发生断电，只是报错失败：请按错误码搜索",
+      "notAppliesTo": "- 没有发生断电，只是报错失败：请按错误码（error code）搜索",
       "risks": "- 断电后电脑可能处于回滚中或半升级状态，盲目重跑可能使情况更复杂",
       "stopRule": "如果电脑反复重启进不了系统，或提示正在回滚：不要强行关机或重跑，停止并交给现场负责人。",
       "steps": [
@@ -260,12 +263,12 @@
     },
     {
       "key": "notask",
-      "title": "Software Center「操作系统」页看不到升级任务",
+      "title": "软件中心（Software Center）「操作系统（Operating Systems）」页看不到升级任务",
       "short": "看不到升级任务",
-      "summary": "Software Center 里没有 Windows 11 升级任务，可能是任务序列策略尚未到达或该电脑不在部署范围内。",
+      "summary": "软件中心（Software Center）里没有 Windows 11 升级任务，可能是任务序列（Task Sequence）策略尚未到达或该电脑不在部署范围内。",
       "stage": "任务序列执行",
       "symptoms": [
-        "Software Center 里没有升级任务",
+        "软件中心（Software Center）里没有升级任务",
         "登录后功能异常"
       ],
       "codes": [],
@@ -274,33 +277,36 @@
         "任务序列",
         "策略"
       ],
-      "appliesTo": "- 打开 Software Center 的「操作系统」页，找不到 Windows 11 升级任务",
-      "notAppliesTo": "- Software Center 本身打不开：请看「Software Center 打不开」\n- 「Windows 更新」页为空：请看另一篇",
-      "risks": "- 是否部署到这台电脑由管理员决定；现场不要自行重装 SCCM 客户端",
+      "appliesTo": "- 打开软件中心（Software Center）的「操作系统（Operating Systems）」页，找不到 Windows 11 升级任务",
+      "notAppliesTo": "- 软件中心（Software Center）本身打不开：请看「Software Center 打不开」\n- 「Windows 更新」页为空：请看另一篇",
+      "risks": "- 是否部署到这台电脑由管理员决定；现场不要自行重装客户端（Configuration Manager client）",
       "stopRule": "",
       "steps": [
         {
-          "action": "在 Software Center 中点右上角刷新或重新打开 Software Center，等待几分钟后再看「操作系统」页。",
+          "action": "在软件中心（Software Center）中点右上角刷新或重新打开 Software Center，等待几分钟后再看「操作系统（Operating Systems）」页。",
           "expected": "列表刷新。",
           "success": "升级任务出现。",
           "ifFailed": "仍然没有：进入下一步。"
         },
         {
-          "action": "告诉管理员：这台电脑的 Software Center「操作系统」页看不到升级任务。请管理员按部署 ID 核对这台电脑是否在目标集合中、策略是否已到达。",
+          "action": "告诉管理员：这台电脑的软件中心（Software Center）「操作系统（Operating Systems）」页看不到升级任务。请管理员按部署 ID 核对这台电脑是否在目标集合中、策略是否已到达。",
           "expected": "管理员核对部署与策略。",
           "success": "管理员确认后任务出现。",
           "ifFailed": "点「告诉管理员」留言。"
         }
       ],
-      "verify": "- 「操作系统」页出现 Windows 11 升级任务，可以开始安装。",
+      "verify": "- 「操作系统（Operating Systems）」页出现 Windows 11 升级任务，可以开始安装。",
       "evidence": "- 内部历史案例：后续日志已见策略进入客户端，具体任务是否显示仍需按部署 ID 核验。",
-      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。"
+      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。",
+      "oldTitles": [
+        "Software Center「操作系统」页看不到升级任务"
+      ]
     },
     {
       "key": "wuempty",
-      "title": "Software Center 的 Windows 更新列表为空（服务器端字段缺失）",
+      "title": "软件中心（Software Center）的 Windows 更新列表为空（服务器端字段缺失）",
       "short": "更新列表为空",
-      "summary": "历史上出现过一批客户端更新列表为空，原因是管理点数据库调用引用了缺失字段，属于服务器端问题，现场无法处理。",
+      "summary": "历史上出现过一批客户端（Configuration Manager client）更新列表为空，原因是管理点（MP）数据库调用引用了缺失字段，属于服务器端问题，现场无法处理。",
       "stage": "其他",
       "symptoms": [
         "Windows 更新列表为空",
@@ -312,7 +318,7 @@
         "更新列表",
         "服务器端"
       ],
-      "appliesTo": "- Software Center 的「更新」页始终为空\n- 同一地点多台电脑同时出现",
+      "appliesTo": "- 软件中心（Software Center）的「更新（Updates）」页始终为空\n- 同一地点多台电脑同时出现",
       "notAppliesTo": "- 只有升级任务看不到：请看「操作系统页看不到升级任务」",
       "risks": "- 这是服务器端问题，现场操作无法修复",
       "stopRule": "",
@@ -324,24 +330,28 @@
           "ifFailed": "只有一台：仍然告诉管理员。"
         },
         {
-          "action": "不要在现场重装客户端。告诉管理员：所在地点 Software Center 更新列表为空，附上受影响数量。",
+          "action": "不要在现场重装客户端（Configuration Manager client）。告诉管理员：所在地点软件中心（Software Center）更新列表为空，附上受影响数量。",
           "expected": "管理员在服务器端核查处理。",
           "success": "管理员处理后列表恢复。",
           "ifFailed": "点「告诉管理员」留言。"
         }
       ],
-      "verify": "- 「更新」页重新出现可安装的项目。",
+      "verify": "- 「更新（Updates）」页重新出现可安装的项目。",
       "evidence": "- 内部历史案例：服务端证据确认管理点数据库调用引用了缺失字段，并整理了同类故障客户端清单。",
-      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。"
+      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。",
+      "oldTitles": [
+        "Software Center 的 Windows 更新列表为空（服务器端字段缺失）",
+        "软件中心（Software Center） 的 Windows 更新列表为空（服务器端字段缺失）"
+      ]
     },
     {
       "key": "dnsempty",
-      "title": "客户端已注册，但 Software Center 列表为空（曾有 DNS 失败）",
+      "title": "客户端（Configuration Manager client）已注册，但软件中心（Software Center）列表为空（曾有 DNS 失败）",
       "short": "列表为空（曾断网）",
-      "summary": "客户端以前出现过 DNS 解析失败，现已注册且近期通信成功，但 Software Center 仍为空；需核对部署和目标集合。",
+      "summary": "客户端（Configuration Manager client）以前出现过 DNS 解析失败，现已注册且近期通信成功，但软件中心（Software Center）仍为空；需核对部署和目标集合。",
       "stage": "其他",
       "symptoms": [
-        "Software Center 列表为空",
+        "软件中心（Software Center）列表为空",
         "网络或获取内容失败"
       ],
       "codes": [],
@@ -350,9 +360,9 @@
         "Software Center",
         "策略"
       ],
-      "appliesTo": "- Software Center 打得开但列表为空\n- 这台电脑以前出现过网络或 DNS 问题",
-      "notAppliesTo": "- Software Center 打不开",
-      "risks": "- 需要管理员核对部署范围和客户端策略",
+      "appliesTo": "- 软件中心（Software Center）打得开但列表为空\n- 这台电脑以前出现过网络或 DNS 问题",
+      "notAppliesTo": "- 软件中心（Software Center）打不开",
+      "risks": "- 需要管理员核对部署范围和客户端（Configuration Manager client）策略",
       "stopRule": "",
       "steps": [
         {
@@ -362,26 +372,30 @@
           "ifFailed": "网络不通：先找现场负责人解决网络问题。"
         },
         {
-          "action": "刷新 Software Center 后仍为空：告诉管理员，请核对预期部署、目标集合及客户端策略。",
+          "action": "刷新软件中心（Software Center）后仍为空：告诉管理员，请核对预期部署、目标集合及客户端（Configuration Manager client）策略。",
           "expected": "管理员核对。",
           "success": "列表出现内容。",
           "ifFailed": "点「告诉管理员」留言。"
         }
       ],
-      "verify": "- Software Center 显示预期的升级任务或更新。",
+      "verify": "- 软件中心（Software Center）显示预期的升级任务或更新。",
       "evidence": "- 内部历史案例：近期通信已有成功证据，按预期部署、目标集合及客户端策略核对。",
-      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。"
+      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。",
+      "oldTitles": [
+        "客户端已注册，但 Software Center 列表为空（曾有 DNS 失败）",
+        "客户端（Configuration Manager client）已注册，但 软件中心（Software Center） 列表为空（曾有 DNS 失败）"
+      ]
     },
     {
       "key": "bits",
-      "title": "SCCM 客户端安装失败：下载安装文件时报 0x800704DD",
-      "short": "客户端装不上",
-      "summary": "客户端安装程序（ccmsetup）在用 BITS 下载安装文件时失败。",
+      "title": "客户端（Configuration Manager client）安装失败：下载安装文件时报 0x800704DD",
+      "short": "客户端（Configuration Manager client）装不上",
+      "summary": "客户端（Configuration Manager client）Windows 安装程序（Windows Setup）（ccmsetup）在用 BITS 下载安装文件时失败。",
       "stage": "其他",
       "symptoms": [
-        "SCCM 客户端安装失败",
+        "客户端（Configuration Manager client）安装失败",
         "网络或获取内容失败",
-        "出现错误码"
+        "出现错误码（error code）"
       ],
       "codes": [
         "0x800704DD"
@@ -391,9 +405,9 @@
         "BITS",
         "客户端安装"
       ],
-      "appliesTo": "- 安装 SCCM 客户端时失败，报 0x800704DD\n- 失败发生在下载安装文件阶段",
-      "notAppliesTo": "- 客户端已安装，只是 Software Center 有问题",
-      "risks": "- 重新安装客户端需要本地管理员权限，应按管理员给出的重试方案进行",
+      "appliesTo": "- 安装客户端（Configuration Manager client）时失败，报 0x800704DD\n- 失败发生在下载安装文件阶段",
+      "notAppliesTo": "- 客户端（Configuration Manager client）已安装，只是软件中心（Software Center）有问题",
+      "risks": "- 重新安装客户端（Configuration Manager client）需要本地管理员权限，应按管理员给出的重试方案进行",
       "stopRule": "",
       "steps": [
         {
@@ -403,25 +417,28 @@
           "ifFailed": "网络不通：先解决网络。"
         },
         {
-          "action": "把错误码和失败时间告诉管理员，按管理员给出的现场重试方案重新安装客户端。",
+          "action": "把错误码（error code）和失败时间告诉管理员，按管理员给出的现场重试方案重新安装客户端（Configuration Manager client）。",
           "expected": "管理员提供重试方案。",
-          "success": "客户端安装完成，Software Center 可以打开。",
+          "success": "客户端（Configuration Manager client）安装完成，软件中心（Software Center）可以打开。",
           "ifFailed": "再次失败：告诉管理员。"
         }
       ],
-      "verify": "- 客户端安装完成，Software Center 可以正常打开。",
+      "verify": "- 客户端（Configuration Manager client）安装完成，软件中心（Software Center）可以正常打开。",
       "evidence": "- 内部历史案例：安装文件下载阶段失败，最终退出记录与现场重试方案见内部记录。",
-      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。"
+      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。",
+      "oldTitles": [
+        "SCCM 客户端安装失败：下载安装文件时报 0x800704DD"
+      ]
     },
     {
       "key": "nomp",
-      "title": "客户端找不到管理点或分发点（0x80072EE7 / 0x87D00203）",
-      "short": "找不到服务器",
-      "summary": "客户端无法解析服务器名称（DNS），或能连上管理点但拿不到内容位置。",
+      "title": "客户端（Configuration Manager client）找不到管理点（MP）或分发点（DP）（0x80072EE7 / 0x87D00203）",
+      "short": "找不到 MP / DP",
+      "summary": "客户端（Configuration Manager client）无法解析服务器名称（DNS），或能连上管理点（MP）但拿不到内容位置。",
       "stage": "内容下载或分发",
       "symptoms": [
         "网络或获取内容失败",
-        "出现错误码"
+        "出现错误码（error code）"
       ],
       "codes": [
         "0x80072EE7",
@@ -434,36 +451,39 @@
         "DP",
         "内容位置"
       ],
-      "appliesTo": "- 报 0x80072EE7（名称解析失败）或 0x87D00203\n- Software Center 报 0x80080005",
+      "appliesTo": "- 报 0x80072EE7（名称解析失败）或 0x87D00203\n- 软件中心（Software Center）报 0x80080005",
       "notAppliesTo": "- 内容已下载完成后才失败",
       "risks": "- 网络、DNS 与边界组配置由管理员和网络负责人处理",
       "stopRule": "",
       "steps": [
         {
-          "action": "记下错误码。如果是 0x80072EE7，先确认电脑能否正常访问公司内网。",
+          "action": "记下错误码（error code）。如果是 0x80072EE7，先确认电脑能否正常访问公司内网。",
           "expected": "判断是网络/DNS 问题还是内容位置问题。",
           "success": "记下判断结果。",
           "ifFailed": "无法判断：直接进入下一步。"
         },
         {
-          "action": "告诉管理员：错误码、所在地点（城市/办公室）以及电脑所在网段。管理员会区分 DNS 失败和「能连管理点但没有内容位置」两种情况。",
-          "expected": "管理员核对网络与分发点配置。",
+          "action": "告诉管理员：错误码（error code）、所在地点（城市/办公室）以及电脑所在网段。管理员会区分 DNS 失败和「能连管理点（MP）但没有内容位置」两种情况。",
+          "expected": "管理员核对网络与分发点（DP）配置。",
           "success": "管理员处理后可以下载。",
           "ifFailed": "点「告诉管理员」留言。"
         }
       ],
-      "verify": "- 客户端能找到分发点并开始下载内容。",
+      "verify": "- 客户端（Configuration Manager client）能找到分发点（DP）并开始下载内容。",
       "evidence": "- 内部历史案例：区分了 DNS 失败与后续管理点可达但无内容位置两种情况；另有 Software Center 0x80080005 与注册异常记录。",
-      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。"
+      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。",
+      "oldTitles": [
+        "客户端找不到管理点或分发点（0x80072EE7 / 0x87D00203）"
+      ]
     },
     {
       "key": "regreject",
-      "title": "客户端注册被拒绝、CcmExec 服务停止时挂起",
-      "short": "客户端注册被拒",
-      "summary": "客户端已分配到站点但注册被拒，Software Center 异常，SMS Agent Host（CcmExec）服务停止时卡住。",
+      "title": "客户端（Configuration Manager client）注册被拒绝、CcmExec 服务停止时挂起",
+      "short": "客户端（Configuration Manager client）注册被拒",
+      "summary": "客户端（Configuration Manager client）已分配到站点但注册被拒，软件中心（Software Center）异常，SMS Agent Host（CcmExec）服务停止时卡住。",
       "stage": "其他",
       "symptoms": [
-        "Software Center 异常",
+        "软件中心（Software Center）异常",
         "服务停止挂起"
       ],
       "codes": [],
@@ -472,13 +492,13 @@
         "CcmExec",
         "Software Center"
       ],
-      "appliesTo": "- Software Center 异常或打不开\n- SMS Agent Host 服务停止时一直显示「正在停止」",
+      "appliesTo": "- 软件中心（Software Center）异常或打不开\n- SMS Agent Host 服务停止时一直显示「正在停止」",
       "notAppliesTo": "- 只是列表为空、服务正常",
-      "risks": "- 强制结束服务或卸载重装客户端需要本地管理员权限，可能影响该电脑其他 SCCM 功能",
-      "stopRule": "不要自行强制结束 CcmExec 进程或卸载客户端：停止，交给现场负责人，按管理员的单机恢复方案处理。",
+      "risks": "- 强制结束服务或卸载重装客户端（Configuration Manager client）需要本地管理员权限，可能影响该电脑其他 SCCM 功能",
+      "stopRule": "不要自行强制结束 CcmExec 进程或卸载客户端（Configuration Manager client）：停止，交给现场负责人，按管理员的单机恢复方案处理。",
       "steps": [
         {
-          "action": "记下现象：Software Center 的报错内容，以及 SMS Agent Host 服务的状态。",
+          "action": "记下现象：软件中心（Software Center）的报错内容，以及 SMS Agent Host 服务的状态。",
           "expected": "信息已记录。",
           "success": "进入下一步。",
           "ifFailed": "看不到服务状态：直接进入下一步。"
@@ -486,22 +506,25 @@
         {
           "action": "交给现场负责人，请管理员分别检查站点分配、注册结果和服务状态，按单机恢复方案处理。",
           "expected": "管理员给出恢复方案。",
-          "success": "客户端恢复，Software Center 正常。",
+          "success": "客户端（Configuration Manager client）恢复，软件中心（Software Center）正常。",
           "ifFailed": "点「告诉管理员」留言。"
         }
       ],
-      "verify": "- SMS Agent Host 服务正常运行，Software Center 可以正常使用。",
+      "verify": "- SMS Agent Host 服务正常运行，软件中心（Software Center）可以正常使用。",
       "evidence": "- 内部历史案例：注册与 UI 证据、停止挂起单机恢复方案、连接异常与卸载重装记录。",
-      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。"
+      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。",
+      "oldTitles": [
+        "客户端注册被拒绝、CcmExec 服务停止时挂起"
+      ]
     },
     {
       "key": "scnoopen",
-      "title": "Software Center 打不开",
-      "short": "Software Center 打不开",
-      "summary": "Software Center 无法启动；需要核对客户端是否完整安装并正常启动。",
+      "title": "软件中心（Software Center）打不开",
+      "short": "软件中心（Software Center）打不开",
+      "summary": "软件中心（Software Center）无法启动；需要核对客户端（Configuration Manager client）是否完整安装并正常启动。",
       "stage": "其他",
       "symptoms": [
-        "Software Center 打不开",
+        "软件中心（Software Center）打不开",
         "登录后功能异常"
       ],
       "codes": [],
@@ -509,27 +532,31 @@
         "Software Center",
         "客户端安装"
       ],
-      "appliesTo": "- 点 Software Center 没有反应，或打开后立即报错",
+      "appliesTo": "- 点软件中心（Software Center）没有反应，或打开后立即报错",
       "notAppliesTo": "- 能打开但列表为空：请看其他篇",
-      "risks": "- 手动安装客户端需要本地管理员权限，应按管理员提供的指南进行",
+      "risks": "- 手动安装客户端（Configuration Manager client）需要本地管理员权限，应按管理员提供的指南进行",
       "stopRule": "",
       "steps": [
         {
-          "action": "重启电脑后再试一次打开 Software Center。",
-          "expected": "Software Center 能打开。",
+          "action": "重启电脑后再试一次打开软件中心（Software Center）。",
+          "expected": "软件中心（Software Center）能打开。",
           "success": "问题解决。",
           "ifFailed": "仍打不开：进入下一步。"
         },
         {
-          "action": "记下报错内容（截图请不要包含电脑名和账号），告诉管理员。管理员会按客户端手动安装与启动核查指南处理。",
+          "action": "记下报错内容（截图请不要包含电脑名和账号），告诉管理员。管理员会按客户端（Configuration Manager client）手动安装与启动核查指南处理。",
           "expected": "管理员提供处理方式。",
-          "success": "Software Center 可以打开。",
+          "success": "软件中心（Software Center）可以打开。",
           "ifFailed": "点「告诉管理员」留言。"
         }
       ],
-      "verify": "- Software Center 能正常打开并显示内容。",
+      "verify": "- 软件中心（Software Center）能正常打开并显示内容。",
       "evidence": "- 内部历史案例：双客户端 Software Center 启动异常分析与手动安装核查指南。",
-      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。"
+      "internalNote": "第一批导入（2026-11-19）。原始案例的设备名、站点、包 ID 与日志位置见内部《已知问题和解决方法 2026-11-19.md》，未放入公开仓库。",
+      "oldTitles": [
+        "Software Center 打不开",
+        "软件中心（Software Center） 打不开"
+      ]
     }
   ],
   "guide": {
@@ -541,15 +568,15 @@
         "title": "问题出在哪？",
         "options": [
           [
-            "软件中心",
+            "软件中心（Software Center）",
             "sc"
           ],
           [
-            "下载",
+            "从分发点（DP）下载",
             "dl"
           ],
           [
-            "安装",
+            "安装（Windows Setup）",
             "inst"
           ],
           [
@@ -557,7 +584,7 @@
             "a:poweroff"
           ],
           [
-            "客户端没装好",
+            "客户端（Configuration Manager client）没装好",
             "cl"
           ],
           [
@@ -569,7 +596,7 @@
       },
       "sc": {
         "kind": "q",
-        "title": "软件中心能打开吗？",
+        "title": "软件中心（Software Center）能打开吗？",
         "options": [
           [
             "打不开",
@@ -610,11 +637,11 @@
         "title": "哪里是空的？",
         "options": [
           [
-            "「操作系统」里没有升级",
+            "「操作系统（Operating Systems）」里没有升级",
             "a:notask"
           ],
           [
-            "「更新」是空的",
+            "「更新（Updates）」是空的",
             "a:wuempty"
           ],
           [
@@ -649,7 +676,7 @@
       },
       "dl_done": {
         "kind": "q",
-        "title": "错误码是哪个？",
+        "title": "错误码（error code）是哪个？",
         "options": [
           [
             "0x80091007",
@@ -687,7 +714,7 @@
       },
       "inst_fast": {
         "kind": "q",
-        "title": "错误码是哪个？",
+        "title": "错误码（error code）是哪个？",
         "options": [
           [
             "0xC1900208",
@@ -706,7 +733,7 @@
       },
       "cl": {
         "kind": "q",
-        "title": "报什么错？",
+        "title": "报什么错误码（error code）？",
         "options": [
           [
             "0x800704DD",
@@ -725,7 +752,7 @@
       },
       "sc_all": {
         "kind": "t",
-        "title": "软件中心的问题",
+        "title": "软件中心（Software Center）的问题",
         "articles": [
           "scnoopen",
           "notask",
@@ -736,7 +763,7 @@
       },
       "sc_open": {
         "kind": "t",
-        "title": "软件中心打不开",
+        "title": "软件中心（Software Center）打不开",
         "articles": [
           "scnoopen",
           "regreject"
@@ -744,7 +771,7 @@
       },
       "sc_empty": {
         "kind": "t",
-        "title": "软件中心是空的",
+        "title": "软件中心（Software Center）是空的",
         "articles": [
           "notask",
           "wuempty",
@@ -771,7 +798,7 @@
       },
       "cl_all": {
         "kind": "t",
-        "title": "客户端的问题",
+        "title": "客户端（Configuration Manager client）的问题",
         "articles": [
           "bits",
           "nomp",
