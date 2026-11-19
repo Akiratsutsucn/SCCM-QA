@@ -91,3 +91,9 @@ details.more b { color: var(--text-2); font-weight: 600; }
   .linkish { margin-left: 0; }
   .step-shots .thumb-btn { width: calc(50% - 5px); }
 }
+
+/* 错误码位置提示 */
+.hint-img { display: block; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); cursor: zoom-in; }
+.hint-img img { display: block; width: 100%; height: auto; }
+.hint-text { font-size: .92rem; margin-top: 8px; line-height: 1.6; }
+.hint-text b { color: var(--danger); }

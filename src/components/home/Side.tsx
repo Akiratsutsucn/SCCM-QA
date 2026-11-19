@@ -4,6 +4,19 @@ import type { Announcement } from '@/lib/announcements';
 import { fmtMonthDay } from '@/lib/time';
 import { homeHref } from './url';
 
+/** 告诉操作员错误码在报错窗口的哪里（静态示例图 public/help/error-code-where.webp）。 */
+export function ErrorCodeHint() {
+  return (
+    <section className="side-card hint" aria-labelledby="hint-h">
+      <h2 id="hint-h">错误码在哪找？</h2>
+      <a href="/help/error-code-where.webp" target="_blank" rel="noopener" className="hint-img" aria-label="打开大图">
+        <img src="/help/error-code-where.webp" width={1020} height={563} alt="任务序列报错窗口：error code 后面 0x 开头的一串就是错误码，例如 0x80004005" />
+      </a>
+      <p className="hint-text">报错窗口里 <b>error code</b> 后面，<b>0x 开头</b>的一串就是。把它输入到上面的搜索框。</p>
+    </section>
+  );
+}
+
 export function Notices({ list }: { list: Announcement[] }) {
   if (!list.length) return null;
   return (

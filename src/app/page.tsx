@@ -19,7 +19,7 @@ import { SearchBox, TellAdmin } from '@/components/client/QuickFeedback';
 import { GuidePanel } from '@/components/home/GuidePanel';
 import { Results } from '@/components/home/Results';
 import { Answer } from '@/components/home/Answer';
-import { Notices, Ranking } from '@/components/home/Side';
+import { ErrorCodeHint, Notices, Ranking } from '@/components/home/Side';
 import { homeHref } from '@/components/home/url';
 
 type Props = { searchParams: Promise<{ q?: string; k?: string; a?: string; n?: string; p?: string }> };
@@ -87,6 +87,7 @@ export default async function Home({ searchParams }: Props) {
       <div className="one-grid">
         <main className="one-main" id="main"><MainArea sp={sp} /></main>
         <aside className="one-side">
+          <ErrorCodeHint />
           <Notices list={notices} />
           <Ranking list={top} />
         </aside>
