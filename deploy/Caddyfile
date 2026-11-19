@@ -27,7 +27,8 @@
 	}
 	reverse_proxy app:3000 {
 		header_up X-Real-IP {remote_host}
-		header_up X-Forwarded-Host {host}
+		# 必须带端口：Next.js Server Actions 用它和浏览器的 Origin（含 :14443）比对，防跨站提交
+		header_up X-Forwarded-Host {hostport}
 	}
 }
 
