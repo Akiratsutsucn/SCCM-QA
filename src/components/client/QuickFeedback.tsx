@@ -30,7 +30,7 @@ export function SearchBox({ defaultValue = '' }: { defaultValue?: string }) {
         router.push(`/?q=${encodeURIComponent(q)}&k=${crypto.randomUUID().replace(/-/g, '').slice(0, 16)}`);
       }}
     >
-      <input ref={ref} name="q" type="search" defaultValue={defaultValue} maxLength={200} placeholder="输入错误码，如 0xC1900101" aria-label="输入错误码或现象" autoComplete="off" enterKeyHint="search" />
+      <input ref={ref} name="q" type="search" defaultValue={defaultValue} maxLength={200} placeholder="输入错误码" aria-label="输入错误码或现象" autoComplete="off" enterKeyHint="search" />
       <button className="btn btn-primary" type="submit">搜索</button>
     </form>
   );
