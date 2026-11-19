@@ -46,6 +46,7 @@ services:
     environment:
       HTTPS_PORT: ${HTTPS_PORT:-14443}
       PUBLIC_HOST: ${PUBLIC_HOST:?须在 .env 设置}
+      ACME_EMAIL: ${ACME_EMAIL:-}
     ports:
       - "${HTTPS_PORT:-14443}:${HTTPS_PORT:-14443}"
       - "80:80"
