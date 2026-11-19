@@ -1,22 +1,13 @@
 {
 	admin off
-	# 用 80 端口做 HTTP-01 验证；HTTPS 对外端口是 HTTPS_PORT（默认 14443）
+	# 用 80 端口做 HTTP-01 验证；默认 HTTPS 端口是 HTTPS_PORT（默认 14443）
 	http_port 80
 	https_port {$HTTPS_PORT}
 	# 浏览器按 IP 访问时不发 SNI，需指定默认证书，否则 TLS 握手失败
 	default_sni {$PUBLIC_HOST}
 }
 
-# 公网 IP 的正式证书：Let's Encrypt 只在 shortlived 配置下签发 IP 证书（约 6 天有效期，Caddy 自动续期）。
-# 验证走 80 端口（HTTP-01），所以 80 必须对公网开放。
-# 申请失败时 Caddy 会持续重试；如需临时回到自签名证书，把下面的 tls 块换成：
-#   tls /certs/server.crt /certs/server.key
-{$PUBLIC_HOST}:{$HTTPS_PORT} {
-	tls {
-		issuer acme {
-			profile shortlived
-		}
-	}
+(app) {
 	encode gzip
 	request_body {
 		max_size 60MB
@@ -27,12 +18,29 @@
 	}
 	reverse_proxy app:3000 {
 		header_up X-Real-IP {remote_host}
-		# 必须带端口：Next.js Server Actions 用它和浏览器的 Origin（含 :14443）比对，防跨站提交
+		# 必须带端口：Next.js Server Actions 用它和浏览器的 Origin 比对，防跨站提交
 		header_up X-Forwarded-Host {hostport}
 	}
 }
 
-# 80 端口：ACME 验证由 Caddy 自动处理，其余请求跳转到 HTTPS 端口
-http://{$PUBLIC_HOST} {
-	redir https://{$PUBLIC_HOST}:{$HTTPS_PORT}{uri} permanent
+# 域名访问（推荐，微信等客户端对纯 IP 有限制）。PUBLIC_DOMAIN 例如 43-133-216-85.sslip.io（免注册，按 IP 自动解析）。
+# 同时监听 14443 与标准 443；443 需在云防火墙放通后才能从外网访问。
+{$PUBLIC_DOMAIN}:{$HTTPS_PORT}, {$PUBLIC_DOMAIN}:443 {
+	import app
+}
+
+# 公网 IP 访问：Let's Encrypt 只在 shortlived 配置下签发 IP 证书（约 6 天有效期，Caddy 自动续期）。
+# 申请失败时如需回到自签名证书，把下面的 tls 块换成：tls /certs/server.crt /certs/server.key
+{$PUBLIC_HOST}:{$HTTPS_PORT} {
+	tls {
+		issuer acme {
+			profile shortlived
+		}
+	}
+	import app
+}
+
+# 80 端口：ACME 验证由 Caddy 自动处理，其余请求跳转到域名
+http://{$PUBLIC_HOST}, http://{$PUBLIC_DOMAIN} {
+	redir https://{$PUBLIC_DOMAIN}:{$HTTPS_PORT}{uri} permanent
 }

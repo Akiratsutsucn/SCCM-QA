@@ -28,6 +28,7 @@ if [[ ! -f .env ]]; then
   umask 077
   cat > .env <<EOF
 PUBLIC_HOST=${IP}
+PUBLIC_DOMAIN=${IP//./-}.sslip.io
 HTTPS_PORT=${PORT}
 PUBLIC_ORIGIN=https://${IP}:${PORT}
 POSTGRES_PASSWORD=$(rnd 32)

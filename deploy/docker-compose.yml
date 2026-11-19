@@ -46,9 +46,11 @@ services:
     environment:
       HTTPS_PORT: ${HTTPS_PORT:-14443}
       PUBLIC_HOST: ${PUBLIC_HOST:?须在 .env 设置}
+      PUBLIC_DOMAIN: ${PUBLIC_DOMAIN:?须在 .env 设置，例如 43-133-216-85.sslip.io}
     ports:
       - "${HTTPS_PORT:-14443}:${HTTPS_PORT:-14443}"
       - "80:80"
+      - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ./certs:/certs:ro
