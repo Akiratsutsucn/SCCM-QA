@@ -48,8 +48,8 @@ bash deploy/install.sh <公网IP> 14443
 默认由 Caddy 自动向 Let's Encrypt 申请公网 IP 证书（shortlived 配置，约 6 天有效期，到期前自动续期），浏览器直接信任，不用在终端装任何东西。
 
 - 条件：80 端口必须对公网开放（HTTP-01 验证）；云防火墙不要关 80。
-- 浏览器按 IP 访问时不发送 SNI，Caddyfile 里的  必须保留，否则握手失败。
-- 自签名证书（ 生成，在 ）保留作备用：Let's Encrypt 不可用时，把 Caddyfile 中的  换成 。
+- 浏览器按 IP 访问时不发送 SNI，Caddyfile 里的 `default_sni` 必须保留，否则握手失败。
+- 自签名证书（`deploy/gen-cert.sh` 生成，在 `deploy/certs`）保留作备用：Let's Encrypt 不可用时，把 Caddyfile 中的 `tls { issuer acme ... }` 换成 `tls /certs/server.crt /certs/server.key`。
 
 ### 备份与恢复
 
