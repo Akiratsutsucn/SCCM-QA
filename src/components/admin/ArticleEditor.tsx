@@ -62,6 +62,7 @@ export function ArticleEditor({ id, initial, stages, symptomVocab, media, action
 
       <div className="editor-grid">
         {text('title', '标题', { full: true, hint: '写清现象和条件，不要只写错误码。' })}
+        {text('short', '短名（排行榜用，≤16 字，可留空）', { full: true })}
         {text('summary', '区分句', { full: true, area: true, rows: 2, hint: '同一错误码有多篇时，用这一句区分本篇适用的条件。' })}
         <div className="field">
           <label htmlFor="f-stage">阶段</label>

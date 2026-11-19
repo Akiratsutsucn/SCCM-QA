@@ -1,6 +1,5 @@
 /** 操作端框架：薄顶栏（仅标题）+ 主体 + 页脚（免责声明、排障会话提示、极弱的管理员入口）。 */
 import Link from 'next/link';
-import { SessionNote } from './client/SessionNote';
 
 export function Shell({ children }: { children: React.ReactNode }) {
   return (
@@ -18,7 +17,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
       <footer className="footer">
         <div className="footer-inner">
           <span>本站只提供操作指导，不会远程操作电脑。</span>
-          <SessionNote />
           <Link href="/admin/login" prefetch={false}>管理员</Link>
         </div>
       </footer>

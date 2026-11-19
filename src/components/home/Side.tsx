@@ -1,0 +1,48 @@
+/** 侧栏：管理员公告 + 遇到最多的问题排名（近 30 天「我也遇到了」匿名自报）。 */
+import Link from 'next/link';
+import type { Announcement } from '@/lib/announcements';
+import { fmtMonthDay } from '@/lib/time';
+import { homeHref } from './url';
+
+export function Notices({ list }: { list: Announcement[] }) {
+  if (!list.length) return null;
+  return (
+    <section className="side-card notices" aria-labelledby="notice-h">
+      <h2 id="notice-h">公告</h2>
+      <ul>
+        {list.map((n) => (
+          <li key={n.id} className={n.pinned ? 'pinned' : ''}>
+            <p className="t">{n.title}</p>
+            {n.body && <p className="b">{n.body}</p>}
+            <div className="row" style={{ justifyContent: 'space-between' }}>
+              <span className="d">{fmtMonthDay(n.updated_at)}</span>
+              {n.link_url && <a className="btn btn-primary btn-sm" href={n.link_url} target="_blank" rel="noopener noreferrer">{n.link_label || '打开'}</a>}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+export function Ranking({ list }: { list: { slug: string; title: string; n: number }[] }) {
+  return (
+    <section className="side-card ranking" aria-labelledby="rank-h">
+      <h2 id="rank-h">常见问题 TOP 10</h2>
+      {list.length === 0 ? <p className="muted small">还没有已发布的问题。</p> : (
+        <ol>
+          {list.map((r, i) => (
+            <li key={r.slug}>
+              <Link href={homeHref({ a: r.slug })}>
+                <span className="rk">{i + 1}</span>
+                <span className="tt">{r.title}</span>
+                {r.n > 0 && <span className="ct">{r.n} 次</span>}
+              </Link>
+            </li>
+          ))}
+        </ol>
+      )}
+      <p className="note">次数 = 近 30 天大家点「我也遇到了」</p>
+    </section>
+  );
+}

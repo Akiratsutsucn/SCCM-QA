@@ -2,6 +2,8 @@
  * 导入第一批 QA（seed/known-issues.json）为草稿文章 + 草稿引导树。不会发布，也不会覆盖已有内容。
  * 用法：DATABASE_URL=... npx tsx scripts/import-known-issues.ts [--publish]
  *   --publish：导入后直接发布文章与引导（仅在管理员已复核 JSON 内容后使用）。
+ *   --refresh：已存在的同标题文章用 JSON 内容覆盖草稿（已发布的会重新发布为新版本）。
+ *   --replace-guide：删除现有引导树后按 JSON 重建（会丢失管理员对引导的修改）。
  * 幂等：按文章标题判断，已存在同标题文章则跳过；引导树已有节点则不导入引导。
  */
 import fs from 'node:fs';
@@ -9,7 +11,7 @@ import path from 'node:path';
 import { openDb, type Db } from '../src/lib/db';
 import { bootstrap } from '../src/lib/bootstrap';
 import { ContentSchema } from '../src/lib/content';
-import { createArticle, publishArticle } from '../src/lib/articles';
+import { createArticle, publishArticle, saveDraft } from '../src/lib/articles';
 import { mainTree, publishTree } from '../src/lib/guides';
 
 interface Seed {
@@ -19,13 +21,20 @@ interface Seed {
 
 const ACTOR = 'import:known-issues';
 
-async function importArticles(db: Db, seed: Seed, publish: boolean) {
+async function importArticles(db: Db, seed: Seed, publish: boolean, refresh: boolean) {
   const ids = new Map<string, number>();
   for (const raw of seed.articles) {
     const existing = await db.query<{ id: number; status: string }>(`SELECT id, status FROM articles WHERE draft->>'title' = $1`, [raw.title]);
     if (existing[0]) {
       ids.set(raw.key, existing[0].id);
-      console.log(`跳过（已存在）：${raw.title}`);
+      if (refresh) {
+        const { key: _k, ...f } = raw;
+        await saveDraft(db, existing[0].id, ContentSchema.parse(f));
+        if (existing[0].status === 'published') await publishArticle(db, existing[0].id, ACTOR, { redactionConfirmed: true, note: '种子更新' });
+        console.log(`已更新：${raw.title}`);
+      } else {
+        console.log(`跳过（已存在）：${raw.title}`);
+      }
       continue;
     }
     const { key: _key, ...fields } = raw;
@@ -45,9 +54,15 @@ async function importArticles(db: Db, seed: Seed, publish: boolean) {
 async function importGuide(db: Db, seed: Seed, ids: Map<string, number>, publish: boolean) {
   const tree = await mainTree(db);
   const n = (await db.query<{ n: number }>('SELECT count(*)::int AS n FROM guide_nodes WHERE tree_id = $1', [tree.id]))[0].n;
-  if (n > 0) {
-    console.log('引导树已有节点，跳过引导导入。');
+  if (n > 0 && !process.argv.includes('--replace-guide')) {
+    console.log('引导树已有节点，跳过引导导入（要覆盖请加 --replace-guide，会删除管理员对引导的修改）。');
     return;
+  }
+  if (n > 0) {
+    await db.query('UPDATE guide_trees SET root_node_id = NULL WHERE id = $1', [tree.id]);
+    await db.query('DELETE FROM guide_nodes WHERE tree_id = $1', [tree.id]);
+    await db.query(`INSERT INTO audit_log (actor, action, detail) VALUES ($1, 'guide.replace', '{}'::jsonb)`, [ACTOR]);
+    console.log(`已删除原引导树 ${n} 个节点`);
   }
   const nodeIds = new Map<string, number>();
   for (const [key, node] of Object.entries(seed.guide.nodes)) {
@@ -83,7 +98,7 @@ async function main() {
   const seed = JSON.parse(fs.readFileSync(file, 'utf8')) as Seed;
   const db = await openDb(process.env.DATABASE_URL || 'pglite:./data/dev');
   await bootstrap(db);
-  const ids = await importArticles(db, seed, publish);
+  const ids = await importArticles(db, seed, publish, process.argv.includes('--refresh'));
   await importGuide(db, seed, ids, publish);
   await db.close();
 }

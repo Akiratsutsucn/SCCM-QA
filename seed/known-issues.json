@@ -4,6 +4,7 @@
     {
       "key": "hash",
       "title": "下载完成后报内容哈希不一致（0x80091007）",
+      "short": "下载后哈希不一致",
       "summary": "升级内容已下载，校验时报哈希不一致；历史案例中原因是终端上的 IPG 软件，而不是分发点内容损坏。",
       "stage": "内容下载或分发",
       "symptoms": [
@@ -50,6 +51,7 @@
     {
       "key": "hardblock",
       "title": "Windows 安装程序报 0xC1900208（兼容性硬阻止）",
+      "short": "兼容性硬阻止 0xC1900208",
       "summary": "安装程序在兼容性检查阶段发现会阻止升级的软件；历史案例中阻止项标题为 ahsProtector。需要找出并处理阻止升级的软件。",
       "stage": "兼容性或前置检查",
       "symptoms": [
@@ -97,6 +99,7 @@
     {
       "key": "updatemedia",
       "title": "看起来是下载失败，实际卡在创建升级介质（0x80070003 / 0x40008）",
+      "short": "创建升级介质失败",
       "summary": "界面像是下载失败，但 SCCM 下载其实已完成；安装程序在系统临时目录创建 UpdateMedia 时失败。",
       "stage": "任务序列执行",
       "symptoms": [
@@ -138,6 +141,7 @@
     {
       "key": "migchoice",
       "title": "升级执行后报 0xC1900204（所选迁移方式被拒绝）",
+      "short": "迁移方式被拒 0xC1900204",
       "summary": "升级任务已到达并执行，安装程序拒绝了所选的迁移方式（MIGCHOICE_BLOCK）。",
       "stage": "Windows 安装过程",
       "symptoms": [
@@ -177,6 +181,7 @@
     {
       "key": "maxruntime",
       "title": "23H2 升 24H2 时被取消（0x87D00664 / 0x800704C7，超过最大运行时间）",
+      "short": "运行太久被取消",
       "summary": "Windows 安装程序还在运行，但 SCCM 因超过部署允许的最大运行时间而取消了它。",
       "stage": "Windows 安装过程",
       "symptoms": [
@@ -218,6 +223,7 @@
     {
       "key": "poweroff",
       "title": "升级中途断电后准备重试",
+      "short": "中途断电后重试",
       "summary": "升级过程中断电或被强制关机，重试前需要先确认电脑当前状态和实际下载来源。",
       "stage": "回滚或失败恢复",
       "symptoms": [
@@ -255,6 +261,7 @@
     {
       "key": "notask",
       "title": "Software Center「操作系统」页看不到升级任务",
+      "short": "看不到升级任务",
       "summary": "Software Center 里没有 Windows 11 升级任务，可能是任务序列策略尚未到达或该电脑不在部署范围内。",
       "stage": "任务序列执行",
       "symptoms": [
@@ -292,6 +299,7 @@
     {
       "key": "wuempty",
       "title": "Software Center 的 Windows 更新列表为空（服务器端字段缺失）",
+      "short": "更新列表为空",
       "summary": "历史上出现过一批客户端更新列表为空，原因是管理点数据库调用引用了缺失字段，属于服务器端问题，现场无法处理。",
       "stage": "其他",
       "symptoms": [
@@ -329,6 +337,7 @@
     {
       "key": "dnsempty",
       "title": "客户端已注册，但 Software Center 列表为空（曾有 DNS 失败）",
+      "short": "列表为空（曾断网）",
       "summary": "客户端以前出现过 DNS 解析失败，现已注册且近期通信成功，但 Software Center 仍为空；需核对部署和目标集合。",
       "stage": "其他",
       "symptoms": [
@@ -366,6 +375,7 @@
     {
       "key": "bits",
       "title": "SCCM 客户端安装失败：下载安装文件时报 0x800704DD",
+      "short": "客户端装不上",
       "summary": "客户端安装程序（ccmsetup）在用 BITS 下载安装文件时失败。",
       "stage": "其他",
       "symptoms": [
@@ -406,6 +416,7 @@
     {
       "key": "nomp",
       "title": "客户端找不到管理点或分发点（0x80072EE7 / 0x87D00203）",
+      "short": "找不到服务器",
       "summary": "客户端无法解析服务器名称（DNS），或能连上管理点但拿不到内容位置。",
       "stage": "内容下载或分发",
       "symptoms": [
@@ -448,6 +459,7 @@
     {
       "key": "regreject",
       "title": "客户端注册被拒绝、CcmExec 服务停止时挂起",
+      "short": "客户端注册被拒",
       "summary": "客户端已分配到站点但注册被拒，Software Center 异常，SMS Agent Host（CcmExec）服务停止时卡住。",
       "stage": "其他",
       "symptoms": [
@@ -485,6 +497,7 @@
     {
       "key": "scnoopen",
       "title": "Software Center 打不开",
+      "short": "Software Center 打不开",
       "summary": "Software Center 无法启动；需要核对客户端是否完整安装并正常启动。",
       "stage": "其他",
       "symptoms": [
@@ -520,35 +533,35 @@
     }
   ],
   "guide": {
-    "_说明": "草稿引导树，导入后不自动发布。q=问题节点，t=结果节点；a:key 表示指向文章。",
-    "root": "stage",
+    "_说明": "草稿引导树（多层积木）。q=问题，t=结果；a:key 直接进文章；最后一项 true 表示「不确定」。导入后不自动发布。",
+    "root": "root",
     "nodes": {
-      "stage": {
+      "root": {
         "kind": "q",
-        "title": "现在停在哪一步？",
+        "title": "问题出在哪？",
         "options": [
           [
-            "Software Center 里找不到任务或打不开",
+            "软件中心",
             "sc"
           ],
           [
-            "兼容性或前置检查失败",
-            "t:compat"
-          ],
-          [
-            "下载内容时或下载完成后报错",
+            "下载",
             "dl"
           ],
           [
-            "安装过程中或运行很久后失败",
+            "安装",
             "inst"
           ],
           [
-            "中途断电或反复重启",
+            "断电 / 重启",
             "a:poweroff"
           ],
           [
-            "不确定",
+            "客户端没装好",
+            "cl"
+          ],
+          [
+            "不知道",
             "t:all",
             true
           ]
@@ -556,45 +569,98 @@
       },
       "sc": {
         "kind": "q",
-        "title": "Software Center 是什么情况？",
+        "title": "软件中心能打开吗？",
         "options": [
           [
-            "打不开或一直报错",
-            "t:sc_open"
+            "打不开",
+            "sc_no"
           ],
           [
-            "能打开，但「操作系统」页没有升级任务",
+            "能打开",
+            "sc_yes"
+          ],
+          [
+            "不知道",
+            "t:sc_all",
+            true
+          ]
+        ]
+      },
+      "sc_no": {
+        "kind": "q",
+        "title": "报错还是没反应？",
+        "options": [
+          [
+            "服务一直“正在停止”",
+            "a:regreject"
+          ],
+          [
+            "没反应 / 报错",
+            "a:scnoopen"
+          ],
+          [
+            "不知道",
+            "t:sc_open",
+            true
+          ]
+        ]
+      },
+      "sc_yes": {
+        "kind": "q",
+        "title": "哪里是空的？",
+        "options": [
+          [
+            "「操作系统」里没有升级",
             "a:notask"
           ],
           [
-            "能打开，但「更新」页或全部列表为空",
-            "t:sc_empty"
+            "「更新」是空的",
+            "a:wuempty"
           ],
           [
-            "不确定",
-            "t:sc_all",
+            "全部都是空的",
+            "a:dnsempty"
+          ],
+          [
+            "不知道",
+            "t:sc_empty",
             true
           ]
         ]
       },
       "dl": {
         "kind": "q",
-        "title": "下载进度走完了吗？",
+        "title": "下载走完了吗？",
         "options": [
           [
-            "走完了，之后报哈希不一致（0x80091007）",
-            "a:hash"
+            "走完了，然后报错",
+            "dl_done"
           ],
           [
-            "走完了，之后报 0x80070003",
-            "a:updatemedia"
-          ],
-          [
-            "没走完，找不到服务器或内容",
+            "没走完",
             "a:nomp"
           ],
           [
-            "不确定",
+            "不知道",
+            "t:dl_all",
+            true
+          ]
+        ]
+      },
+      "dl_done": {
+        "kind": "q",
+        "title": "错误码是哪个？",
+        "options": [
+          [
+            "0x80091007",
+            "a:hash"
+          ],
+          [
+            "0x80070003",
+            "a:updatemedia"
+          ],
+          [
+            "其他 / 看不清",
             "t:dl_all",
             true
           ]
@@ -602,55 +668,64 @@
       },
       "inst": {
         "kind": "q",
-        "title": "看到的错误码是哪个？",
+        "title": "安装多久后失败？",
         "options": [
           [
-            "0xC1900204",
-            "a:migchoice"
+            "马上就失败",
+            "inst_fast"
           ],
           [
-            "0x87D00664 或 0x800704C7（跑了很久被取消）",
+            "跑了很久才失败",
             "a:maxruntime"
           ],
           [
-            "0xC1900208",
-            "a:hardblock"
-          ],
-          [
-            "不确定",
+            "不知道",
             "t:inst_all",
             true
           ]
         ]
       },
-      "compat": {
-        "kind": "t",
-        "title": "兼容性检查失败，可以先看",
-        "articles": [
-          "hardblock"
+      "inst_fast": {
+        "kind": "q",
+        "title": "错误码是哪个？",
+        "options": [
+          [
+            "0xC1900208",
+            "a:hardblock"
+          ],
+          [
+            "0xC1900204",
+            "a:migchoice"
+          ],
+          [
+            "其他 / 看不清",
+            "t:inst_all",
+            true
+          ]
         ]
       },
-      "sc_open": {
-        "kind": "t",
-        "title": "Software Center 打不开，可以先看",
-        "articles": [
-          "scnoopen",
-          "regreject",
-          "bits"
-        ]
-      },
-      "sc_empty": {
-        "kind": "t",
-        "title": "列表为空，可以先看",
-        "articles": [
-          "wuempty",
-          "dnsempty",
-          "notask"
+      "cl": {
+        "kind": "q",
+        "title": "报什么错？",
+        "options": [
+          [
+            "0x800704DD",
+            "a:bits"
+          ],
+          [
+            "0x80072EE7 或 0x87D00203",
+            "a:nomp"
+          ],
+          [
+            "不知道",
+            "t:cl_all",
+            true
+          ]
         ]
       },
       "sc_all": {
         "kind": "t",
-        "title": "Software Center 相关，可以先看",
+        "title": "软件中心的问题",
         "articles": [
           "scnoopen",
           "notask",
@@ -659,9 +734,26 @@
           "regreject"
         ]
       },
+      "sc_open": {
+        "kind": "t",
+        "title": "软件中心打不开",
+        "articles": [
+          "scnoopen",
+          "regreject"
+        ]
+      },
+      "sc_empty": {
+        "kind": "t",
+        "title": "软件中心是空的",
+        "articles": [
+          "notask",
+          "wuempty",
+          "dnsempty"
+        ]
+      },
       "dl_all": {
         "kind": "t",
-        "title": "下载相关，可以先看",
+        "title": "下载的问题",
         "articles": [
           "hash",
           "updatemedia",
@@ -670,21 +762,30 @@
       },
       "inst_all": {
         "kind": "t",
-        "title": "安装过程相关，可以先看",
+        "title": "安装的问题",
         "articles": [
+          "hardblock",
           "migchoice",
-          "maxruntime",
-          "hardblock"
+          "maxruntime"
+        ]
+      },
+      "cl_all": {
+        "kind": "t",
+        "title": "客户端的问题",
+        "articles": [
+          "bits",
+          "nomp",
+          "regreject"
         ]
       },
       "all": {
         "kind": "t",
-        "title": "可以先用错误码搜索，或先看这些常见问题",
+        "title": "常见问题",
         "articles": [
           "hash",
           "hardblock",
-          "updatemedia",
           "notask",
+          "updatemedia",
           "scnoopen"
         ]
       }

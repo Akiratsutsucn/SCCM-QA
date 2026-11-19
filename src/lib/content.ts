@@ -13,6 +13,8 @@ export const StepSchema = z.object({
 
 export const ContentSchema = z.object({
   title: z.string().max(200).default(''),
+  /** 短名（排行榜、按钮里用，建议 ≤ 16 字）；空则用标题 */
+  short: z.string().max(40).default(''),
   summary: z.string().max(500).default(''),
   stage: z.string().max(60).default(''),
   secondaryStage: z.string().max(60).default(''),

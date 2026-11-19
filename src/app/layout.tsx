@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import './onepage.css';
 
 export const metadata: Metadata = {
   title: { default: 'Windows 11 升级排障助手', template: '%s · Windows 11 升级排障助手' },
