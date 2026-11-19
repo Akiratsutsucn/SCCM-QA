@@ -1,0 +1,12 @@
+node_modules
+.next
+data
+coverage
+.git
+.env
+.env.*
+deploy/.env
+deploy/certs
+deploy/backups
+*.log
+*.pem

@@ -94,7 +94,7 @@ async function importGuide(db: Db, seed: Seed, ids: Map<string, number>, publish
 
 async function main() {
   const publish = process.argv.includes('--publish');
-  const file = path.resolve(__dirname, '../seed/known-issues.json');
+  const file = path.resolve(process.env.SEED_FILE || path.join(__dirname, '../seed/known-issues.json'));
   const seed = JSON.parse(fs.readFileSync(file, 'utf8')) as Seed;
   const db = await openDb(process.env.DATABASE_URL || 'pglite:./data/dev');
   await bootstrap(db);

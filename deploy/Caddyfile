@@ -1,0 +1,26 @@
+{
+	auto_https off
+	admin off
+}
+
+# HTTP 80：一律跳转到 HTTPS 端口
+:80 {
+	redir https://{$PUBLIC_HOST}:{$HTTPS_PORT}{uri} permanent
+}
+
+# HTTPS：自签名证书（deploy/gen-cert.sh 生成，SAN 含公网 IP）
+:{$HTTPS_PORT} {
+	tls /certs/server.crt /certs/server.key
+	encode gzip
+	request_body {
+		max_size 60MB
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+	reverse_proxy app:3000 {
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-Host {host}
+	}
+}
