@@ -32,6 +32,10 @@ describe('脱敏', () => {
     expect(r.changed).toBe(true);
     expect(r.text).toContain('0x80070002');
     expect(r.text).not.toMatch(/10\.1\.2\.3|zhang|li\.si|a@b\.com/);
+    expect(r.text).toBe('0x80070002 在 [IP] 上，[用户目录]\\log，[账号]，[邮箱]');
+  });
+  it('UNC 路径整体隐去', () => {
+    expect(redact('见 \\\\fs01\\share$\\win11 目录').text).toBe('见 [网络路径] 目录');
   });
   it('发布前检测 UNC 路径', () => {
     expect(findSensitive('\\\\server\\share\\x')).toContain('UNC 路径');

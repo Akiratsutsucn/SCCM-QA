@@ -12,7 +12,7 @@ const MAX_EDGE = 2400;
 const THUMB_EDGE = 480;
 
 export function mediaDir(): string {
-  return path.resolve(process.env.MEDIA_DIR || './data/media');
+  return path.resolve(/*turbopackIgnore: true*/ process.env.MEDIA_DIR || './data/media');
 }
 
 export function sniffImage(buf: Buffer): 'image/jpeg' | 'image/png' | 'image/webp' | null {
@@ -24,7 +24,6 @@ export function sniffImage(buf: Buffer): 'image/jpeg' | 'image/png' | 'image/web
 }
 
 const filePath = (id: string, kind: 'full' | 'thumb') => path.join(mediaDir(), `${id}.${kind}.webp`);
-const origPath = (id: string) => path.join(mediaDir(), `${id}.orig.webp`);
 
 async function writeVariants(id: string, input: Buffer) {
   const sharp = (await import('sharp')).default;
@@ -49,8 +48,6 @@ export async function saveUpload(db: Db, buf: Buffer, meta: { caption?: string; 
   let info;
   try {
     info = await writeVariants(id, buf);
-    // 保留去元数据后的原图，重新裁切/打码时从它开始处理
-    await fs.copyFile(filePath(id, 'full'), origPath(id));
   } catch {
     return { ok: false, error: '图片无法解码' };
   }
@@ -63,10 +60,10 @@ export async function saveUpload(db: Db, buf: Buffer, meta: { caption?: string; 
 
 export interface Rect { x: number; y: number; w: number; h: number }
 
-/** 在原图上应用矩形打码与裁切。坐标为 0–1 比例。改图后须重新确认脱敏。 */
+/** 在当前图上累积应用矩形打码与裁切（不保留未打码原图）。坐标为 0–1 比例。改图后须重新确认脱敏。 */
 export async function editImage(db: Db, id: string, edit: { crop?: Rect | null; boxes: Rect[] }) {
   const sharp = (await import('sharp')).default;
-  const src = await fs.readFile(origPath(id));
+  const src = await fs.readFile(filePath(id, 'full'));
   const meta = await sharp(src).metadata();
   const W = meta.width ?? 1;
   const H = meta.height ?? 1;
@@ -115,5 +112,5 @@ export async function readMediaFile(db: Db, id: string, kind: 'full' | 'thumb', 
 
 export async function deleteMedia(db: Db, id: string) {
   await db.query('DELETE FROM media WHERE id = $1', [id]);
-  for (const p of [filePath(id, 'full'), filePath(id, 'thumb'), origPath(id)]) await fs.rm(p, { force: true });
+  for (const p of [filePath(id, 'full'), filePath(id, 'thumb')]) await fs.rm(p, { force: true });
 }

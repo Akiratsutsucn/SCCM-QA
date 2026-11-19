@@ -5,9 +5,10 @@
 const RULES: { name: string; re: RegExp; mask: string }[] = [
   { name: '口令或密钥', re: /\b(password|passwd|pwd|secret|token|apikey|api_key|口令|密码)\s*[:=：]\s*\S+/gi, mask: '[已隐去口令]' },
   { name: '邮箱', re: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, mask: '[邮箱]' },
-  { name: 'UNC 路径', re: /\\[A-Za-z0-9._$-]+(\[^\s\]+)*/g, mask: '[网络路径]' },
-  { name: '用户目录', re: /[A-Za-z]:\Users\[^\s\]+/gi, mask: '[用户目录]' },
-  { name: '域\用户', re: /\b[A-Za-z][A-Za-z0-9-]{1,30}\[A-Za-z0-9._-]{2,40}\b/g, mask: '[账号]' },
+  // 顺序有意义：先处理用户目录，再处理 UNC，最后处理 域\用户（避免把 C:\Users 误判为账号）
+  { name: '用户目录', re: /[A-Za-z]:\\Users\\[^\s\\]+/gi, mask: '[用户目录]' },
+  { name: 'UNC 路径', re: /\\\\[A-Za-z0-9._$-]+(?:\\[^\s\\]+)*/g, mask: '[网络路径]' },
+  { name: '域\\用户', re: /(?<![A-Za-z]:)\b[A-Za-z][A-Za-z0-9-]{1,30}\\[A-Za-z0-9._-]{2,40}\b/g, mask: '[账号]' },
   { name: 'IPv4', re: /\b(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)\b/g, mask: '[IP]' },
   { name: 'IPv6', re: /\b(?:[0-9a-f]{1,4}:){3,7}[0-9a-f]{1,4}\b/gi, mask: '[IP]' },
   { name: '内网 URL', re: /\bhttps?:\/\/(?:localhost|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|[A-Za-z0-9-]+(?:\/|:|$))[^\s]*/gi, mask: '[内网地址]' },

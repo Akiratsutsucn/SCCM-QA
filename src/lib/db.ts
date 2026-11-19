@@ -58,7 +58,7 @@ async function createPglite(target: string): Promise<Db> {
   const { pg_trgm } = await import('@electric-sql/pglite/contrib/pg_trgm');
   let dataDir: string | undefined;
   if (target !== 'memory') {
-    dataDir = path.resolve(target);
+    dataDir = path.resolve(/*turbopackIgnore: true*/ target);
     fs.mkdirSync(dataDir, { recursive: true });
   }
   const pg = await PGlite.create({ dataDir, extensions: { pg_trgm } });
