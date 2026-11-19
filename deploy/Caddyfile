@@ -3,7 +3,6 @@
 	# 用 80 端口做 HTTP-01 验证；HTTPS 对外端口是 HTTPS_PORT（默认 14443）
 	http_port 80
 	https_port {$HTTPS_PORT}
-	email {$ACME_EMAIL:}
 }
 
 # 公网 IP 的正式证书：Let's Encrypt 只在 shortlived 配置下签发 IP 证书（约 6 天有效期，Caddy 自动续期）。
