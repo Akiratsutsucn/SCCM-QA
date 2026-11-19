@@ -45,7 +45,11 @@ bash deploy/install.sh <公网IP> 14443
 
 ### 证书
 
-自签名证书，浏览器会提示「不安全」，这是已接受的预期现象。如果不想看到提示，在终端安装 `deploy/certs/ca.crt`（只分发这个公钥证书；`ca.key` 不出服务器）。公网 IP 变更后需删除 `deploy/certs` 并重新运行 `gen-cert.sh`。
+默认由 Caddy 自动向 Let's Encrypt 申请公网 IP 证书（shortlived 配置，约 6 天有效期，到期前自动续期），浏览器直接信任，不用在终端装任何东西。
+
+- 条件：80 端口必须对公网开放（HTTP-01 验证）；云防火墙不要关 80。
+- 浏览器按 IP 访问时不发送 SNI，Caddyfile 里的  必须保留，否则握手失败。
+- 自签名证书（ 生成，在 ）保留作备用：Let's Encrypt 不可用时，把 Caddyfile 中的  换成 。
 
 ### 备份与恢复
 
