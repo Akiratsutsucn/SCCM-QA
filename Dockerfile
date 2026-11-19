@@ -17,6 +17,7 @@ ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0 MED
 RUN groupadd -r app && useradd -r -g app app && mkdir -p /data/media && chown -R app:app /data
 COPY --from=build --chown=app:app /app/.next/standalone ./
 COPY --from=build --chown=app:app /app/.next/static ./.next/static
+COPY --from=build --chown=app:app /app/public ./public
 # 第一批 QA 导入（docker compose exec app node dist/import.cjs --publish）
 COPY --from=build --chown=app:app /app/dist ./dist
 COPY --from=build --chown=app:app /app/seed ./seed
