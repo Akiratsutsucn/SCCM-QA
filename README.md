@@ -41,15 +41,16 @@ bash deploy/install.sh <公网IP> 14443
 
 更新：`git pull && cd deploy && sudo docker compose up -d --build app`
 
-对外端口：HTTPS `14443`、HTTP `80`（只做跳转）。数据库和应用端口不对外开放。云防火墙另外把 22 限制为管理员来源 IP。
+对外端口：HTTPS `443`（主域名，标准端口）、`14443`（备用）、HTTP `80`（只做跳转）。数据库和应用端口不对外开放。云防火墙另外把 22 限制为管理员来源 IP。
 
-### 证书
+### 证书与域名
 
-默认由 Caddy 自动向 Let's Encrypt 申请公网 IP 证书（shortlived 配置，约 6 天有效期，到期前自动续期），浏览器直接信任，不用在终端装任何东西。
+主域名用标准 443 + Let's Encrypt 90 天证书（到期自动续期），浏览器、微信、手机都直接信任。域名在 `deploy/.env` 的 `PUBLIC_DOMAIN` 指定（例如 `sccm-qa.tsutsu.love`），DNS 需用 A 记录指向服务器公网 IP，且**关闭 Cloudflare 代理（橙色云朵）**，走直连。
 
+- 微信 / Tabbit 等客户端会拦截纯 IP 访问和 sslip.io 这类「IP 伪装域名」，必须用真实域名。
+- IP 地址仍可作为应急入口（shortlived 约 6 天证书，自动续期），但浏览器会提示证书与 IP 不符，仅作备用。
 - 条件：80 端口必须对公网开放（HTTP-01 验证）；云防火墙不要关 80。
-- 浏览器按 IP 访问时不发送 SNI，Caddyfile 里的 `default_sni` 必须保留，否则握手失败。
-- 自签名证书（`deploy/gen-cert.sh` 生成，在 `deploy/certs`）保留作备用：Let's Encrypt 不可用时，把 Caddyfile 中的 `tls { issuer acme ... }` 换成 `tls /certs/server.crt /certs/server.key`。
+- 自签名证书（`deploy/gen-cert.sh` 生成，在 `deploy/certs`）保留作最后备用。
 
 ### 备份与恢复
 
